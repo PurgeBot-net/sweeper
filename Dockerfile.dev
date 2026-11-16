@@ -1,0 +1,16 @@
+FROM golang:1.26-alpine AS builder
+WORKDIR /build
+
+COPY common/   ./common/
+COPY database/ ./database/
+COPY sweeper/  ./sweeper/
+
+WORKDIR /build/sweeper
+RUN go work init . ../common ../database
+RUN go build -o /sweeper ./cmd/
+
+FROM alpine:latest
+RUN adduser -D -g '' container
+USER container
+COPY --from=builder /sweeper /sweeper
+ENTRYPOINT ["/sweeper"]

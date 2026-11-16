@@ -1,23 +1,26 @@
-# template
+# sweeper
 
-GitHub template repository for [PurgeBot-net](https://github.com/PurgeBot-net) — provides consistent CI/CD, linting, and repo hygiene across all services.
+Data retention service for PurgeBot. Deletes everything PurgeBot stores about a server once the bot has been out of it for more than 30 days.
 
-## Usage
+## Responsibilities
 
-When creating a new repository under `PurgeBot-net`, select this as the template. Then:
+- Lists the servers the bot is in every hour and records when a server with stored data is no longer listed
+- Clears that record when the server is listed again; the gateway also clears it on a genuine join
+- Refuses to act on a list that failed part way or holds under 90% of Discord's approximate guild count
+- Confirms each server due for deletion with Discord, then deletes its purge keys in Redis and every row in Postgres, and rewrites the Redis AOF
+- `-once` runs a single sweep and exits: `docker compose run --rm sweeper -once`
 
-1. Open `.github/workflows/ci.yml` and replace `CHANGE_ME` with the repo name (e.g. `interactions`).
-2. For **library repos**: swap `build-service.yml` → `build-library.yml` and delete the `with: package_name:` block — `build-library.yml` takes no inputs.
+## Configuration
 
-That's it. The reusable workflows live in [PurgeBot-net/workflows](https://github.com/PurgeBot-net/workflows).
+All configuration is loaded from environment variables (see `.env.example` in the docker repo).
 
-## What you get
-
-- **CI/CD** — vet + test on push to `main`, pull requests, and manual runs; on push to `main` or a manual run: build + push Docker image to ghcr.io tagged as `latest` and the commit SHA
-- **Auto-labelling** — PRs are labelled by type (bug, feature, improvement, etc.)
-- **`.editorconfig`** — consistent formatting across editors
-- **`.gitignore`** — Go-specific, ignores `.env` but keeps `.env.example`
-- **PR template** — type checklist, testing notes, and `go.mod` reminder
-- **CODEOWNERS** — auto-requests review from `@PurgeBot-net/devs`
-- **SECURITY.md** — responsible disclosure policy
-- **LICENSE** — MIT
+| Variable         | Description                       |
+| ---------------- | --------------------------------- |
+| `DISCORD_TOKEN`  | Bot token                         |
+| `DATABASE_*`     | PostgreSQL connection             |
+| `REDIS_ADDR`     | Redis address                     |
+| `REDIS_PASSWORD` | Redis password                    |
+| `REDIS_DB`       | Redis database index              |
+| `SENTRY_DSN`     | Sentry error reporting (optional) |
+| `LOG_LEVEL`      | `debug`, `info`, `warn`, `error`  |
+| `LOG_JSON`       | `true` for JSON log output        |
