@@ -14,13 +14,13 @@ Data retention service for PurgeBot. Deletes everything PurgeBot stores about a 
 
 All configuration is loaded from environment variables (see `.env.example` in the docker repo).
 
-| Variable         | Description                       |
-| ---------------- | --------------------------------- |
-| `DISCORD_TOKEN`  | Bot token                         |
-| `DATABASE_*`     | PostgreSQL connection             |
-| `REDIS_ADDR`     | Redis address                     |
-| `REDIS_PASSWORD` | Redis password                    |
-| `REDIS_DB`       | Redis database index              |
-| `SENTRY_DSN`     | Sentry error reporting (optional) |
-| `LOG_LEVEL`      | `debug`, `info`, `warn`, `error`  |
-| `LOG_JSON`       | `true` for JSON log output        |
+| Variable         | Description                                  |
+| ---------------- | -------------------------------------------- |
+| `DISCORD_TOKEN`  | Bot token                                    |
+| `DATABASE_*`     | PostgreSQL connection                        |
+| `REDIS_ADDR`     | Redis address                                |
+| `REDIS_PASSWORD` | Redis password                               |
+| `REDIS_DB`       | Redis database index                         |
+| `SENTRY_DSN`     | Sentry-compatible error reporting (optional) |
+| `LOG_LEVEL`      | `debug`, `info`, `warn`, `error`             |
+| `LOG_JSON`       | `true` for JSON log output                   |
